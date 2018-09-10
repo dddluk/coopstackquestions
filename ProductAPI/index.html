@@ -1,0 +1,173 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Product App</title>
+</head>
+<body>
+
+    <div>
+        <h2>All Products</h2>
+        <ul id="products" />
+    </div>
+    <div>
+        <h2>Search by ID</h2>
+        <input type="text" id="prodId" size="5" />
+        <input type="button" value="Search" onclick="find();" />
+        <p id="product" />
+    </div>
+    <div>
+        <h2>Delete by ID</h2>
+        <input type="text" id="prodId" size="5" />
+        <input type="button" value="Delete" onclick="remove();" />
+        <p id="product" />
+    </div>
+    <div>
+        <h2>Add Product</h2>
+        <h5>Id</h5><input type="text" id="prodId" size="5" />
+        <h5>Name</h5><input type="text" id="prodName" size="8" />
+        <h5>Brand</h5><input type="text" id="prodBrand" size="8" />
+        <h5>Price</h5><input type="text" id="prodPrice" size="5" />
+        <input type="button" value="Add" onclick="add();" />
+        <p id="product" />
+    </div>
+    <div>
+        <h2>Edit Product</h2>
+        <h5>Id</h5><input type="text" id="prodId" size="5" />
+        <h5>Name</h5><input type="text" id="prodName" size="8" />
+        <h5>Brand</h5><input type="text" id="prodBrand" size="8" />
+        <h5>Price</h5><input type="text" id="prodPrice" size="5" />
+        <input type="button" value="Edit" onclick="editItem();" />
+        <p id="product" />
+    </div>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+    <script>
+    var uri = 'api/products';
+    $(document).ready(function () {
+      // Send an AJAX request
+      $.getJSON(uri)
+          .done(function (data) {
+            // On success, 'data' contains a list of products.
+            $.each(data, function (key, item) {
+              // Add a list item for the product.
+              $('<li>', { text: formatItem(item) }).appendTo($('#products'));
+            });
+          });
+    });
+     $(document).ready(function () {  
+             $("#Save").click(function () {  
+                 var person = new Object();  
+                 person.name = $('#name').val();  
+                 person.surname = $('#surname').val();  
+                 $.ajax({  
+                     url: 'http://localhost:3413/api/person',  
+                     type: 'DELETE',  
+                     dataType: 'json',  
+                     data:person,  
+                     success: function (data, textStatus, xhr) {  
+                         console.log(data);  
+                     },  
+                     error: function (xhr, textStatus, errorThrown) {  
+                         console.log('Error in Operation');  
+                     }  
+                 });  
+             });  
+         });   
+    function formatItem(item) {
+      return item.Name + ': $' + item.Price;
+    }
+    function find() {
+      var id = $('#prodId').val();
+      $.getJSON(uri + '/' + id)
+          .done(function (data) {
+            $('#product').text(formatItem(data));
+          })
+          .fail(function (jqXHR, textStatus, err) {
+            $('#product').text('Error: ' + err);
+          });
+    }
+    function remove() {
+        var id = $('#prodId').removeData();
+        $.getJSON(uri + '/' + id)
+            .done(function (data) {
+                $('#product').text(formatItem(data));
+            })
+            .fail(function (jqXHR, textStatus, err) {
+                $('#product').text('Error: ' + err);
+            });
+    }
+    function add(product) {
+        // Check if <tbody> tag exists, add one if not
+        if ($("#productTable tbody").length == 0) {
+            $("#productTable").append("<tbody></tbody>");
+        }
+        // Append row to <table>
+        $("#productTable tbody").append(
+          productBuildTableRow(product));
+    }
+    function productAdd(product) {
+        $.ajax({
+            url: "/api/Product",
+            type: 'POST',
+            contentType:
+               "application/json;charset=utf-8",
+            data: JSON.stringify(product),
+            success: function (product) {
+                productAddSuccess(product);
+            },
+            error: function (request, message, error) {
+                handleException(request, message, error);
+            }
+        });
+    }
+    function updateClick() {
+        // Build product object from inputs
+        Product = new Object();
+        Product.ProductName = $("#productname").val();
+        Product.IntroductionDate =
+            $("#introdate").val();
+        Product.Url = $("#url").val();
+        if ($("#updateButton").text().trim() ==
+                  "Add") {
+            productAdd(Product);
+        }
+    }
+    function editItem(id) {
+    $.each(todos, function (key, item) {
+        if (item.id === id) {
+            $('#edit-name').val(item.name);
+            $('#edit-id').val(item.id);
+            $('#edit-isComplete')[0].checked = item.isComplete;
+        }
+    });
+    $('#spoiler').css({ 'display': 'block' });
+}
+
+$('.my-form').on('submit', function () {
+    const item = {
+        'name': $('#edit-name').val(),
+        'isComplete': $('#edit-isComplete').is(':checked'),
+        'id': $('#edit-id').val()
+    };
+
+    $.ajax({
+        url: uri + '/' + $('#edit-id').val(),
+        type: 'PUT',
+        accepts: 'application/json',
+        contentType: 'application/json',
+        data: JSON.stringify(item),
+        success: function (result) {
+            getData();
+        }
+    });
+
+    closeInput();
+    return false;
+});
+
+function closeInput() {
+    $('#spoiler').css({ 'display': 'none' });
+}
+
+    </script>
+</body>
+</html>
