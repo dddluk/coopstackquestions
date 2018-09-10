@@ -1,0 +1,5 @@
+c:\users\dylli_000\documents\visual studio 2015\Projects\GuessTheFood\GuessTheFood\bin\Debug\GuessTheFood.exe.config
+c:\users\dylli_000\documents\visual studio 2015\Projects\GuessTheFood\GuessTheFood\bin\Debug\GuessTheFood.exe
+c:\users\dylli_000\documents\visual studio 2015\Projects\GuessTheFood\GuessTheFood\bin\Debug\GuessTheFood.pdb
+c:\users\dylli_000\documents\visual studio 2015\Projects\GuessTheFood\GuessTheFood\obj\Debug\GuessTheFood.exe
+c:\users\dylli_000\documents\visual studio 2015\Projects\GuessTheFood\GuessTheFood\obj\Debug\GuessTheFood.pdb
